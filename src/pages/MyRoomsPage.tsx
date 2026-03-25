@@ -11,6 +11,8 @@ const MyRoomsPage = () => {
     const navigate = useNavigate();
     const [rooms, setRooms] = useState<Room[]>([]);
     const [loading, setLoading] = useState(true);
+    const [joinLink, setJoinLink] = useState('');
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchRooms = async () => {
@@ -27,16 +29,60 @@ const MyRoomsPage = () => {
         fetchRooms();
     }, []);
 
+    const handleJoin = () => {
+        setError('');
+        if (!joinLink.trim()) return;
+
+        try {
+            const urlString = joinLink.startsWith('http') ? joinLink : `https://${joinLink}`;
+            const url = new URL(urlString);
+            
+            if (!url.pathname.includes('/room/')) {
+                setError('Invalid room link format. Please ensure it contains a valid room link.');
+                return;
+            }
+
+            const pathStartIndex = url.pathname.indexOf('/room/');
+            const path = url.pathname.slice(pathStartIndex);
+            
+            if (url.origin === window.location.origin) {
+                navigate(path);
+            } else {
+                window.location.href = joinLink;
+            }
+        } catch (e) {
+            setError('Please enter a valid URL.');
+        }
+    };
+
     return (
         <NeonLayout>
             <div className="py-8 max-w-4xl mx-auto w-full flex-1 flex flex-col">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-neon-pink to-neon-blue bg-clip-text text-transparent">
+                <div className="mb-8">
+                    <h1 className="text-3xl font-bold bg-gradient-to-r from-neon-pink to-neon-blue bg-clip-text text-transparent mb-6">
                         My Events
                     </h1>
-                    <NeonButton onClick={() => navigate('/create')}>
-                        + New Event
-                    </NeonButton>
+                    <div className="flex flex-col gap-2">
+                        <NeonCard className="p-2 flex gap-4 items-center pl-4 bg-gray-900/50 backdrop-blur-sm">
+                            <input
+                                type="text"
+                                placeholder="Paste a room link here to join!"
+                                className="flex-1 bg-transparent border-none text-white focus:outline-none focus:ring-0 placeholder-gray-500"
+                                value={joinLink}
+                                onChange={(e) => {
+                                    setJoinLink(e.target.value);
+                                    if (error) setError('');
+                                }}
+                                onKeyDown={(e) => e.key === 'Enter' && handleJoin()}
+                            />
+                            <NeonButton onClick={handleJoin}>
+                                Join
+                            </NeonButton>
+                        </NeonCard>
+                        {error && (
+                            <p className="text-red-500 text-sm ml-2">{error}</p>
+                        )}
+                    </div>
                 </div>
 
                 {loading ? (
@@ -47,10 +93,7 @@ const MyRoomsPage = () => {
                     <NeonCard className="flex flex-col items-center justify-center p-12 text-center gap-4 border-dashed border-gray-700">
                         <Calendar className="w-16 h-16 text-gray-600" />
                         <h3 className="text-xl font-semibold text-gray-300">No events found</h3>
-                        <p className="text-gray-500">You haven't created any rooms yet.</p>
-                        <NeonButton variant="secondary" onClick={() => navigate('/create')}>
-                            Create your first room
-                        </NeonButton>
+                        <p className="text-gray-500">Paste a link above to join an event!</p>
                     </NeonCard>
                 ) : (
                     <div className="grid gap-4">
