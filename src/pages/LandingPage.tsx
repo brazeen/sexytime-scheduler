@@ -19,11 +19,6 @@ const LandingPage = () => {
                 </div>
 
                 <div className="max-w-4xl space-y-8 z-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/30 border border-blue-500/30 text-blue-300 text-sm mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                        <Clock className="w-4 h-4" />
-                        <span>Easy Time Scheduler</span>
-                    </div>
-
                     <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white animate-in fade-in zoom-in duration-1000">
                         Sync up with your squad
                         <br />
@@ -74,7 +69,7 @@ const LandingPage = () => {
                             <Zap className="w-8 h-8 text-cyan-400" />
                         </div>
                         <h3 className="text-xl font-bold text-white">Real-time Updates</h3>
-                        <p className="text-slate-400">Watch schedules update live from all your homies.</p>
+                        <p className="text-slate-400">Watch schedules update live from all your homies with Supabase's Realtime Database.</p>
                     </NeonCard>
                 </div>
             </div>
