@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import NeonButton from '../components/ui/NeonButton';
 import NeonCard from '../components/ui/NeonCard';
 import NeonLayout from '../components/layout/NeonLayout';
-import { Calendar, Users, Zap, Star, Clock } from 'lucide-react';
+import { Calendar, Users, Zap, Star } from 'lucide-react';
 
 const LandingPage = () => {
     const navigate = useNavigate();
